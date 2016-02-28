@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.3.0-alpha">
+  <Workflow xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:q1="clr-namespace:Bonsai.Shaders;assembly=Bonsai.Shaders" xmlns="https://horizongir.org/bonsai">
+    <Nodes>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="q1:UpdateFrame" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="q1:CreateLookAt">
+          <q1:Eye>
+            <q1:X>10</q1:X>
+            <q1:Y>10</q1:Y>
+            <q1:Z>10</q1:Z>
+          </q1:Eye>
+          <q1:Target>
+            <q1:X>0</q1:X>
+            <q1:Y>0</q1:Y>
+            <q1:Z>0</q1:Z>
+          </q1:Target>
+          <q1:Up>
+            <q1:X>0</q1:X>
+            <q1:Y>1</q1:Y>
+            <q1:Z>0</q1:Z>
+          </q1:Up>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="CombineLatest" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="q1:CreatePerspectiveFieldOfView">
+          <q1:FovY>0.7853982</q1:FovY>
+          <q1:AspectRatio>1.33333337</q1:AspectRatio>
+          <q1:NearClip>0.1</q1:NearClip>
+          <q1:FarClip>100</q1:FarClip>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Source.Item2,Source.Item3</Selector>
+      </Expression>
+      <Expression xsi:type="Multiply" />
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="q1:UpdateUniform">
+          <q1:UniformName>mvp</q1:UniformName>
+          <q1:ShaderName>Capsule</q1:ShaderName>
+        </Combinator>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge>
+        <From>0</From>
+        <To>2</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>1</From>
+        <To>2</To>
+        <Label>Source2</Label>
+      </Edge>
+      <Edge>
+        <From>2</From>
+        <To>4</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>3</From>
+        <To>2</To>
+        <Label>Source3</Label>
+      </Edge>
+      <Edge>
+        <From>4</From>
+        <To>5</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>5</From>
+        <To>6</To>
+        <Label>Source1</Label>
+      </Edge>
+    </Edges>
+  </Workflow>
+  <ExtensionTypes>
+    <Type>Bonsai.Shaders.UpdateFrame, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.CreateLookAt, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Reactive.CombineLatest, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.CreatePerspectiveFieldOfView, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Expressions.MultiplyBuilder, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.UpdateUniform, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+  </ExtensionTypes>
+</WorkflowBuilder>
