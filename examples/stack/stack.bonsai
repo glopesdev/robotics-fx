@@ -14,10 +14,14 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="q2:CreateWorld">
-          <q2:GravityX>0</q2:GravityX>
-          <q2:GravityY>-9</q2:GravityY>
-          <q2:GravityZ>0</q2:GravityZ>
+          <q2:Gravity>
+            <q2:X>0</q2:X>
+            <q2:Y>-9</q2:Y>
+            <q2:Z>0</q2:Z>
+          </q2:Gravity>
           <q2:StepSize>0.016</q2:StepSize>
+          <q2:Cfm>1E-10</q2:Cfm>
+          <q2:Erp>0.2</q2:Erp>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -274,9 +278,17 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="q2:CreateBody">
-                <q2:PositionX>5</q2:PositionX>
-                <q2:PositionY>20</q2:PositionY>
-                <q2:PositionZ>0</q2:PositionZ>
+                <q2:Position>
+                  <q2:X>5</q2:X>
+                  <q2:Y>20</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Position>
+                <q2:Orientation>
+                  <q2:W>1</q2:W>
+                  <q2:X>0</q2:X>
+                  <q2:Y>0</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Orientation>
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -514,9 +526,17 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="q2:CreateBody">
-                <q2:PositionX>0</q2:PositionX>
-                <q2:PositionY>20</q2:PositionY>
-                <q2:PositionZ>0</q2:PositionZ>
+                <q2:Position>
+                  <q2:X>0</q2:X>
+                  <q2:Y>20</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Position>
+                <q2:Orientation>
+                  <q2:W>1</q2:W>
+                  <q2:X>0</q2:X>
+                  <q2:Y>0</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Orientation>
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -695,9 +715,17 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="q2:CreateBody">
-                <q2:PositionX>5</q2:PositionX>
-                <q2:PositionY>20</q2:PositionY>
-                <q2:PositionZ>0</q2:PositionZ>
+                <q2:Position>
+                  <q2:X>5</q2:X>
+                  <q2:Y>20</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Position>
+                <q2:Orientation>
+                  <q2:W>0.7071</q2:W>
+                  <q2:X>0.7071</q2:X>
+                  <q2:Y>0</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Orientation>
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
