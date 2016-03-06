@@ -1,0 +1,1493 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.3.0-alpha">
+  <Workflow xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:q1="clr-namespace:Bonsai.Shaders;assembly=Bonsai.Shaders" xmlns:q2="clr-namespace:Bonsai.Physics;assembly=Bonsai.Physics" xmlns:q3="clr-namespace:Bonsai.Physics.Collision;assembly=Bonsai.Physics" xmlns:q4="clr-namespace:Bonsai.Physics.Joints;assembly=Bonsai.Physics" xmlns="https://horizongir.org/bonsai">
+    <Nodes>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="q1:UpdateFrame" />
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Source.EventArgs.Time</Selector>
+      </Expression>
+      <Expression xsi:type="ReplaySubject">
+        <Name>World</Name>
+        <BufferSize xsi:nil="true" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="q2:CreateWorld">
+          <q2:Gravity>
+            <q2:X>0</q2:X>
+            <q2:Y>-9</q2:Y>
+            <q2:Z>0</q2:Z>
+          </q2:Gravity>
+          <q2:StepSize>0.016</q2:StepSize>
+          <q2:Cfm>1E-10</q2:Cfm>
+          <q2:Erp>0.2</q2:Erp>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="q3:CreateHashSpace">
+          <q3:MaxContacts>10</q3:MaxContacts>
+          <q3:ExcludeConnected>true</q3:ExcludeConnected>
+          <q3:CollisionHandlers>
+            <q3:CollisionHandler>
+              <q3:Material1>Rock</q3:Material1>
+              <q3:Material2>Rock</q3:Material2>
+              <q3:CollisionSurface>
+                <q3:Mode>Bounce</q3:Mode>
+                <q3:Mu>100</q3:Mu>
+                <q3:Mu2>0</q3:Mu2>
+                <q3:Rho>0</q3:Rho>
+                <q3:Rho2>0</q3:Rho2>
+                <q3:RhoN>0</q3:RhoN>
+                <q3:Bounce>0.1</q3:Bounce>
+                <q3:BounceVelocity>0</q3:BounceVelocity>
+                <q3:SoftErp>0</q3:SoftErp>
+                <q3:SoftCfm>0</q3:SoftCfm>
+                <q3:Motion1>0</q3:Motion1>
+                <q3:Motion2>0</q3:Motion2>
+                <q3:MotionN>0</q3:MotionN>
+                <q3:Slip1>0</q3:Slip1>
+                <q3:Slip2>0</q3:Slip2>
+              </q3:CollisionSurface>
+            </q3:CollisionHandler>
+          </q3:CollisionHandlers>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="ReplaySubject">
+        <Name>Space</Name>
+        <BufferSize xsi:nil="true" />
+      </Expression>
+      <Expression xsi:type="ReplaySubject">
+        <Name>Camera</Name>
+        <BufferSize xsi:nil="true" />
+      </Expression>
+      <Expression xsi:type="NestedWorkflow">
+        <Name>CreateFloor</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:WindowClosed" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="TakeUntil" />
+            </Expression>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="Sink">
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge>
+                    <From>0</From>
+                    <To>1</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:DrawShader">
+                <q1:ShaderName>Plane</q1:ShaderName>
+                <q1:DrawMode>Triangles</q1:DrawMode>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Multiply" />
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="CombineLatest" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:UpdateUniform">
+                <q1:UniformName>mvp</q1:UniformName>
+                <q1:ShaderName>Plane</q1:ShaderName>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Camera</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:CreateTranslation">
+                <q1:X>0</q1:X>
+                <q1:Y>0</q1:Y>
+                <q1:Z>0</q1:Z>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:UpdateFrame" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q3:CreatePlane">
+                <q3:CategoryBits xsi:nil="true" />
+                <q3:CollideBits xsi:nil="true" />
+                <q3:Material>Rock</q3:Material>
+                <q3:A>0</q3:A>
+                <q3:B>1</q3:B>
+                <q3:C>0</q3:C>
+                <q3:D>0</q3:D>
+              </Combinator>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge>
+              <From>0</From>
+              <To>1</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>1</From>
+              <To>3</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>2</From>
+              <To>12</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>5</From>
+              <To>4</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>6</From>
+              <To>8</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>7</From>
+              <To>6</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>8</From>
+              <To>5</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>9</From>
+              <To>7</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>10</From>
+              <To>7</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>11</From>
+              <To>10</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>12</From>
+              <To>1</To>
+              <Label>Source1</Label>
+            </Edge>
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="SelectMany">
+        <Name>LeftBackWheel</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q4:CreateHinge">
+                <q4:Axis>
+                  <q4:X>0</q4:X>
+                  <q4:Y>0</q4:Y>
+                  <q4:Z>1</q4:Z>
+                </q4:Axis>
+                <q4:LimitMotor>
+                  <q4:Bounce>0</q4:Bounce>
+                  <q4:Cfm xsi:nil="true" />
+                  <q4:FudgeFactor>1</q4:FudgeFactor>
+                  <q4:HighStop>INF</q4:HighStop>
+                  <q4:LowStop>-INF</q4:LowStop>
+                  <q4:MaxForce>100</q4:MaxForce>
+                  <q4:StopCfm xsi:nil="true" />
+                  <q4:StopErp xsi:nil="true" />
+                  <q4:Velocity>5</q4:Velocity>
+                </q4:LimitMotor>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="Sink">
+              <Name>DrawBody</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:DrawShader">
+                      <q1:ShaderName>Cylinder</q1:ShaderName>
+                      <q1:DrawMode>Triangles</q1:DrawMode>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:UpdateUniform">
+                      <q1:UniformName>mvp</q1:UniformName>
+                      <q1:ShaderName>Cylinder</q1:ShaderName>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q2:BodyTransform" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Camera</Name>
+                  </Expression>
+                  <Expression xsi:type="Multiply" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:CreateScale">
+                      <q1:X>1</q1:X>
+                      <q1:Y>1</q1:Y>
+                      <q1:Z>0.5</q1:Z>
+                    </Combinator>
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge>
+                    <From>0</From>
+                    <To>4</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>2</From>
+                    <To>1</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>3</From>
+                    <To>2</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>4</From>
+                    <To>5</To>
+                    <Label>Source2</Label>
+                  </Edge>
+                  <Edge>
+                    <From>5</From>
+                    <To>7</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>6</From>
+                    <To>5</To>
+                    <Label>Source3</Label>
+                  </Edge>
+                  <Edge>
+                    <From>7</From>
+                    <To>3</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>8</From>
+                    <To>5</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateBody">
+                <q2:Position>
+                  <q2:X>3</q2:X>
+                  <q2:Y>19</q2:Y>
+                  <q2:Z>-2</q2:Z>
+                </q2:Position>
+                <q2:Orientation>
+                  <q2:W>1</q2:W>
+                  <q2:X>0</q2:X>
+                  <q2:Y>0</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Orientation>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>World</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Space</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:WindowClosed" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="TakeUntil" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q3:CreateCylinder">
+                <q3:CategoryBits xsi:nil="true" />
+                <q3:CollideBits xsi:nil="true" />
+                <q3:Material>Rock</q3:Material>
+                <q3:Radius>1</q3:Radius>
+                <q3:Length>1</q3:Length>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateCylinderMass">
+                <q2:Radius>1</q2:Radius>
+                <q2:Length>1</q2:Length>
+                <q2:Direction>Z</q2:Direction>
+                <q2:TotalMass>1</q2:TotalMass>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ReplaySubject">
+              <Name>Body</Name>
+              <BufferSize>1</BufferSize>
+            </Expression>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Body</Name>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge>
+              <From>2</From>
+              <To>9</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>3</From>
+              <To>2</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>4</From>
+              <To>3</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>5</From>
+              <To>8</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>6</From>
+              <To>7</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>7</From>
+              <To>1</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>8</From>
+              <To>7</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>9</From>
+              <To>10</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>10</From>
+              <To>8</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>11</From>
+              <To>0</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>12</From>
+              <To>0</To>
+              <Label>Source1</Label>
+            </Edge>
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="SelectMany">
+        <Name>Chassis</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="Sink">
+              <Name>DrawBody</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:DrawShader">
+                      <q1:ShaderName>Box</q1:ShaderName>
+                      <q1:DrawMode>Triangles</q1:DrawMode>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:UpdateUniform">
+                      <q1:UniformName>mvp</q1:UniformName>
+                      <q1:ShaderName>Box</q1:ShaderName>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q2:BodyTransform" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Camera</Name>
+                  </Expression>
+                  <Expression xsi:type="Multiply" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:CreateScale">
+                      <q1:X>2</q1:X>
+                      <q1:Y>1</q1:Y>
+                      <q1:Z>2</q1:Z>
+                    </Combinator>
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge>
+                    <From>0</From>
+                    <To>4</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>2</From>
+                    <To>1</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>3</From>
+                    <To>2</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>4</From>
+                    <To>5</To>
+                    <Label>Source2</Label>
+                  </Edge>
+                  <Edge>
+                    <From>5</From>
+                    <To>7</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>6</From>
+                    <To>5</To>
+                    <Label>Source3</Label>
+                  </Edge>
+                  <Edge>
+                    <From>7</From>
+                    <To>3</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>8</From>
+                    <To>5</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateBody">
+                <q2:Position>
+                  <q2:X>5</q2:X>
+                  <q2:Y>20</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Position>
+                <q2:Orientation>
+                  <q2:W>1</q2:W>
+                  <q2:X>0</q2:X>
+                  <q2:Y>0</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Orientation>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>World</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Space</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:WindowClosed" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="TakeUntil" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q3:CreateBox">
+                <q3:CategoryBits xsi:nil="true" />
+                <q3:CollideBits xsi:nil="true" />
+                <q3:Material>Rock</q3:Material>
+                <q3:LengthX>4</q3:LengthX>
+                <q3:LengthY>2</q3:LengthY>
+                <q3:LengthZ>4</q3:LengthZ>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateBoxMass">
+                <q2:LengthX>4</q2:LengthX>
+                <q2:LengthY>2</q2:LengthY>
+                <q2:LengthZ>4</q2:LengthZ>
+                <q2:TotalMass>1</q2:TotalMass>
+              </Combinator>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge>
+              <From>2</From>
+              <To>9</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>3</From>
+              <To>2</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>4</From>
+              <To>3</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>5</From>
+              <To>8</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>6</From>
+              <To>7</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>7</From>
+              <To>1</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>8</From>
+              <To>7</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>9</From>
+              <To>8</To>
+              <Label>Source1</Label>
+            </Edge>
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="NestedWorkflow">
+        <Name>CreateCamera</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:CreateLookAt">
+                <q1:Eye>
+                  <q1:X>25</q1:X>
+                  <q1:Y>15</q1:Y>
+                  <q1:Z>25</q1:Z>
+                </q1:Eye>
+                <q1:Target>
+                  <q1:X>0</q1:X>
+                  <q1:Y>0</q1:Y>
+                  <q1:Z>0</q1:Z>
+                </q1:Target>
+                <q1:Up>
+                  <q1:X>0</q1:X>
+                  <q1:Y>1</q1:Y>
+                  <q1:Z>0</q1:Z>
+                </q1:Up>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:CreatePerspectiveFieldOfView">
+                <q1:FovY>0.7853982</q1:FovY>
+                <q1:AspectRatio>1.33333337</q1:AspectRatio>
+                <q1:NearClip>0.1</q1:NearClip>
+                <q1:FarClip>1000</q1:FarClip>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="Zip" />
+            </Expression>
+            <Expression xsi:type="Multiply" />
+          </Nodes>
+          <Edges>
+            <Edge>
+              <From>0</From>
+              <To>2</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>0</From>
+              <To>3</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>2</From>
+              <To>4</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>3</From>
+              <To>4</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>4</From>
+              <To>5</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>5</From>
+              <To>1</To>
+              <Label>Source1</Label>
+            </Edge>
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="Merge" />
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Source.Body</Selector>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="Timer">
+          <DueTime>PT0.15S</DueTime>
+          <Period>PT2S</Period>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="SelectMany">
+        <Name>RightBackWheel</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q4:CreateHinge">
+                <q4:Axis>
+                  <q4:X>0</q4:X>
+                  <q4:Y>0</q4:Y>
+                  <q4:Z>1</q4:Z>
+                </q4:Axis>
+                <q4:LimitMotor>
+                  <q4:Bounce>0</q4:Bounce>
+                  <q4:Cfm xsi:nil="true" />
+                  <q4:FudgeFactor>1</q4:FudgeFactor>
+                  <q4:HighStop>INF</q4:HighStop>
+                  <q4:LowStop>-INF</q4:LowStop>
+                  <q4:MaxForce>100</q4:MaxForce>
+                  <q4:StopCfm xsi:nil="true" />
+                  <q4:StopErp xsi:nil="true" />
+                  <q4:Velocity>5</q4:Velocity>
+                </q4:LimitMotor>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="Sink">
+              <Name>DrawBody</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:DrawShader">
+                      <q1:ShaderName>Cylinder</q1:ShaderName>
+                      <q1:DrawMode>Triangles</q1:DrawMode>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:UpdateUniform">
+                      <q1:UniformName>mvp</q1:UniformName>
+                      <q1:ShaderName>Cylinder</q1:ShaderName>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q2:BodyTransform" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Camera</Name>
+                  </Expression>
+                  <Expression xsi:type="Multiply" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:CreateScale">
+                      <q1:X>1</q1:X>
+                      <q1:Y>1</q1:Y>
+                      <q1:Z>0.5</q1:Z>
+                    </Combinator>
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge>
+                    <From>0</From>
+                    <To>4</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>2</From>
+                    <To>1</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>3</From>
+                    <To>2</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>4</From>
+                    <To>5</To>
+                    <Label>Source2</Label>
+                  </Edge>
+                  <Edge>
+                    <From>5</From>
+                    <To>7</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>6</From>
+                    <To>5</To>
+                    <Label>Source3</Label>
+                  </Edge>
+                  <Edge>
+                    <From>7</From>
+                    <To>3</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>8</From>
+                    <To>5</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateBody">
+                <q2:Position>
+                  <q2:X>3</q2:X>
+                  <q2:Y>19</q2:Y>
+                  <q2:Z>2</q2:Z>
+                </q2:Position>
+                <q2:Orientation>
+                  <q2:W>1</q2:W>
+                  <q2:X>0</q2:X>
+                  <q2:Y>0</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Orientation>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>World</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Space</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:WindowClosed" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="TakeUntil" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q3:CreateCylinder">
+                <q3:CategoryBits xsi:nil="true" />
+                <q3:CollideBits xsi:nil="true" />
+                <q3:Material>Rock</q3:Material>
+                <q3:Radius>1</q3:Radius>
+                <q3:Length>1</q3:Length>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateCylinderMass">
+                <q2:Radius>1</q2:Radius>
+                <q2:Length>1</q2:Length>
+                <q2:Direction>Z</q2:Direction>
+                <q2:TotalMass>1</q2:TotalMass>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ReplaySubject">
+              <Name>Body</Name>
+              <BufferSize>1</BufferSize>
+            </Expression>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Body</Name>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge>
+              <From>2</From>
+              <To>9</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>3</From>
+              <To>2</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>4</From>
+              <To>3</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>5</From>
+              <To>8</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>6</From>
+              <To>7</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>7</From>
+              <To>1</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>8</From>
+              <To>7</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>9</From>
+              <To>10</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>10</From>
+              <To>8</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>11</From>
+              <To>0</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>12</From>
+              <To>0</To>
+              <Label>Source1</Label>
+            </Edge>
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="Take">
+          <Count>5</Count>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="TakeUntil" />
+      </Expression>
+      <Expression xsi:type="SelectMany">
+        <Name>LeftFrontWheel</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="Sink">
+              <Name>DrawBody</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:DrawShader">
+                      <q1:ShaderName>Cylinder</q1:ShaderName>
+                      <q1:DrawMode>Triangles</q1:DrawMode>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:UpdateUniform">
+                      <q1:UniformName>mvp</q1:UniformName>
+                      <q1:ShaderName>Cylinder</q1:ShaderName>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q2:BodyTransform" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Camera</Name>
+                  </Expression>
+                  <Expression xsi:type="Multiply" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:CreateScale">
+                      <q1:X>1</q1:X>
+                      <q1:Y>1</q1:Y>
+                      <q1:Z>0.5</q1:Z>
+                    </Combinator>
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge>
+                    <From>0</From>
+                    <To>4</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>2</From>
+                    <To>1</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>3</From>
+                    <To>2</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>4</From>
+                    <To>5</To>
+                    <Label>Source2</Label>
+                  </Edge>
+                  <Edge>
+                    <From>5</From>
+                    <To>7</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>6</From>
+                    <To>5</To>
+                    <Label>Source3</Label>
+                  </Edge>
+                  <Edge>
+                    <From>7</From>
+                    <To>3</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>8</From>
+                    <To>5</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateBody">
+                <q2:Position>
+                  <q2:X>7</q2:X>
+                  <q2:Y>19</q2:Y>
+                  <q2:Z>-2</q2:Z>
+                </q2:Position>
+                <q2:Orientation>
+                  <q2:W>1</q2:W>
+                  <q2:X>0</q2:X>
+                  <q2:Y>0</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Orientation>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>World</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Space</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:WindowClosed" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="TakeUntil" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q3:CreateCylinder">
+                <q3:CategoryBits xsi:nil="true" />
+                <q3:CollideBits xsi:nil="true" />
+                <q3:Material>Rock</q3:Material>
+                <q3:Radius>1</q3:Radius>
+                <q3:Length>1</q3:Length>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateCylinderMass">
+                <q2:Radius>1</q2:Radius>
+                <q2:Length>1</q2:Length>
+                <q2:Direction>Z</q2:Direction>
+                <q2:TotalMass>1</q2:TotalMass>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="ReplaySubject">
+              <Name>Body</Name>
+              <BufferSize>1</BufferSize>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Body</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q4:CreateHinge">
+                <q4:Axis>
+                  <q4:X>0</q4:X>
+                  <q4:Y>0</q4:Y>
+                  <q4:Z>1</q4:Z>
+                </q4:Axis>
+                <q4:LimitMotor>
+                  <q4:Bounce>0</q4:Bounce>
+                  <q4:Cfm xsi:nil="true" />
+                  <q4:FudgeFactor>1</q4:FudgeFactor>
+                  <q4:HighStop>INF</q4:HighStop>
+                  <q4:LowStop>-INF</q4:LowStop>
+                  <q4:MaxForce>100</q4:MaxForce>
+                  <q4:StopCfm xsi:nil="true" />
+                  <q4:StopErp xsi:nil="true" />
+                  <q4:Velocity>5</q4:Velocity>
+                </q4:LimitMotor>
+              </Combinator>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge>
+              <From>1</From>
+              <To>8</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>2</From>
+              <To>1</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>3</From>
+              <To>2</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>4</From>
+              <To>7</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>5</From>
+              <To>6</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>6</From>
+              <To>0</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>7</From>
+              <To>6</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>8</From>
+              <To>10</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>9</From>
+              <To>12</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>10</From>
+              <To>7</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>11</From>
+              <To>12</To>
+              <Label>Source1</Label>
+            </Edge>
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="q1:WindowClosed" />
+      </Expression>
+      <Expression xsi:type="SelectMany">
+        <Name>RightFrontWheel</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="Sink">
+              <Name>DrawBody</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:DrawShader">
+                      <q1:ShaderName>Cylinder</q1:ShaderName>
+                      <q1:DrawMode>Triangles</q1:DrawMode>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:UpdateUniform">
+                      <q1:UniformName>mvp</q1:UniformName>
+                      <q1:ShaderName>Cylinder</q1:ShaderName>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q2:BodyTransform" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Camera</Name>
+                  </Expression>
+                  <Expression xsi:type="Multiply" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="q1:CreateScale">
+                      <q1:X>1</q1:X>
+                      <q1:Y>1</q1:Y>
+                      <q1:Z>0.5</q1:Z>
+                    </Combinator>
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge>
+                    <From>0</From>
+                    <To>4</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>2</From>
+                    <To>1</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>3</From>
+                    <To>2</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>4</From>
+                    <To>5</To>
+                    <Label>Source2</Label>
+                  </Edge>
+                  <Edge>
+                    <From>5</From>
+                    <To>7</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>6</From>
+                    <To>5</To>
+                    <Label>Source3</Label>
+                  </Edge>
+                  <Edge>
+                    <From>7</From>
+                    <To>3</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                  <Edge>
+                    <From>8</From>
+                    <To>5</To>
+                    <Label>Source1</Label>
+                  </Edge>
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateBody">
+                <q2:Position>
+                  <q2:X>7</q2:X>
+                  <q2:Y>19</q2:Y>
+                  <q2:Z>2</q2:Z>
+                </q2:Position>
+                <q2:Orientation>
+                  <q2:W>1</q2:W>
+                  <q2:X>0</q2:X>
+                  <q2:Y>0</q2:Y>
+                  <q2:Z>0</q2:Z>
+                </q2:Orientation>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>World</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Space</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q1:WindowClosed" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="TakeUntil" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q3:CreateCylinder">
+                <q3:CategoryBits xsi:nil="true" />
+                <q3:CollideBits xsi:nil="true" />
+                <q3:Material>Rock</q3:Material>
+                <q3:Radius>1</q3:Radius>
+                <q3:Length>1</q3:Length>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q2:CreateCylinderMass">
+                <q2:Radius>1</q2:Radius>
+                <q2:Length>1</q2:Length>
+                <q2:Direction>Z</q2:Direction>
+                <q2:TotalMass>1</q2:TotalMass>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="q4:CreateHinge">
+                <q4:Axis>
+                  <q4:X>0</q4:X>
+                  <q4:Y>0</q4:Y>
+                  <q4:Z>1</q4:Z>
+                </q4:Axis>
+                <q4:LimitMotor>
+                  <q4:Bounce>0</q4:Bounce>
+                  <q4:Cfm xsi:nil="true" />
+                  <q4:FudgeFactor>1</q4:FudgeFactor>
+                  <q4:HighStop>INF</q4:HighStop>
+                  <q4:LowStop>-INF</q4:LowStop>
+                  <q4:MaxForce>100</q4:MaxForce>
+                  <q4:StopCfm xsi:nil="true" />
+                  <q4:StopErp xsi:nil="true" />
+                  <q4:Velocity>5</q4:Velocity>
+                </q4:LimitMotor>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ReplaySubject">
+              <Name>Body</Name>
+              <BufferSize>1</BufferSize>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Body</Name>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge>
+              <From>0</From>
+              <To>10</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>2</From>
+              <To>9</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>3</From>
+              <To>2</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>4</From>
+              <To>3</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>5</From>
+              <To>8</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>6</From>
+              <To>7</To>
+              <Label>Source2</Label>
+            </Edge>
+            <Edge>
+              <From>7</From>
+              <To>1</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>8</From>
+              <To>7</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>9</From>
+              <To>11</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>11</From>
+              <To>8</To>
+              <Label>Source1</Label>
+            </Edge>
+            <Edge>
+              <From>12</From>
+              <To>10</To>
+              <Label>Source1</Label>
+            </Edge>
+          </Edges>
+        </Workflow>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge>
+        <From>0</From>
+        <To>1</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>1</From>
+        <To>4</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>1</From>
+        <To>3</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>2</From>
+        <To>10</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>3</From>
+        <To>2</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>4</From>
+        <To>5</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>5</From>
+        <To>7</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>8</From>
+        <To>11</To>
+        <Label>Source3</Label>
+      </Edge>
+      <Edge>
+        <From>9</From>
+        <To>12</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>10</From>
+        <To>6</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>11</From>
+        <To>16</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>12</From>
+        <To>17</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>12</From>
+        <To>19</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>12</From>
+        <To>8</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>12</From>
+        <To>14</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>13</From>
+        <To>15</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>14</From>
+        <To>11</To>
+        <Label>Source4</Label>
+      </Edge>
+      <Edge>
+        <From>15</From>
+        <To>9</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>17</From>
+        <To>11</To>
+        <Label>Source1</Label>
+      </Edge>
+      <Edge>
+        <From>18</From>
+        <To>16</To>
+        <Label>Source2</Label>
+      </Edge>
+      <Edge>
+        <From>19</From>
+        <To>11</To>
+        <Label>Source2</Label>
+      </Edge>
+    </Edges>
+  </Workflow>
+  <ExtensionTypes>
+    <Type>Bonsai.Shaders.UpdateFrame, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.CreateWorld, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.Collision.CreateHashSpace, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.WindowClosed, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Reactive.TakeUntil, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Expressions.SinkBuilder, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.DrawShader, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Expressions.MultiplyBuilder, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Reactive.CombineLatest, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.UpdateUniform, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.CreateTranslation, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.Collision.CreatePlane, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.Joints.CreateHinge, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.BodyTransform, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.CreateScale, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.CreateBody, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.Collision.CreateCylinder, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.CreateCylinderMass, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.Collision.CreateBox, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Physics.CreateBoxMass, Bonsai.Physics, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.CreateLookAt, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Shaders.CreatePerspectiveFieldOfView, Bonsai.Shaders, Version=0.10.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Reactive.Zip, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Reactive.Merge, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Reactive.Timer, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+    <Type>Bonsai.Reactive.Take, Bonsai.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=null</Type>
+  </ExtensionTypes>
+</WorkflowBuilder>
